@@ -13,13 +13,14 @@
     <script type="text/javascript">
         // global var to hold contents of csv
         var dataset;
-        
+        var height = 200
+        var width = 1200
         // Create SVG element
         d3.select("body")
             .append("svg")
             .style("background", "aliceblue")
-            .attr("width", 1200)
-            .attr("height", 800);
+            .attr("width", width)
+            .attr("height", height);
 
         // select svg for later use
         svg = d3.select("svg");
@@ -27,19 +28,14 @@
         getVis = function () {
             console.log("ughhh", dataset);
             
-            for(i=0; i<2; i++){
+            for(i=0; i<1; i++){
                 svg.selectAll("circle")
                 .data(dataset)
                 .enter()
                 .append("circle")
                 .attr("cx", function (d) {return parseInt(d["GDP"])/100})
-                .attr("cy", function (d) {return parseInt(d["LifeExp"])*2})
-                
-                // map area to population
-//                .attr("r", function (d) { console.log("asdf",d["Population"]); return parseInt(d["Population"])/1000000});
-//            .attr("r", function (d) {return parseInt(d["Population"])/1000000000});
-            .attr("r", function (d) {return 5});
-            
+                .attr("cy", function (d) {return height - parseInt(d["LifeExp"])})
+                .attr("r", function (d) {return parseInt(d["Population"])/100000000});
             }
             
         }

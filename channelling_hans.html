@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="tas-com">
+
+<head>
+    <meta charset="utf-8">
+    <title>ugh</title>
+    <!--    using d3 api, will need internet connection -->
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+
+</head>
+
+<body>
+    <script type="text/javascript">
+        // global var to hold contents of csv
+        var dataset;
+        
+        // Create SVG element
+        d3.select("body")
+            .append("svg")
+            .style("background", "aliceblue")
+            .attr("width", 1200)
+            .attr("height", 800);
+
+        // select svg for later use
+        svg = d3.select("svg");
+
+        getVis = function () {
+            console.log("ughhh", dataset);
+            
+            for(i=0; i<2; i++){
+                svg.selectAll("circle")
+                .data(dataset)
+                .enter()
+                .append("circle")
+                .attr("cx", function (d) {return parseInt(d["GDP"])/100})
+                .attr("cy", function (d) {return parseInt(d["LifeExp"])*2})
+                
+                // map area to population
+//                .attr("r", function (d) { console.log("asdf",d["Population"]); return parseInt(d["Population"])/1000000});
+//            .attr("r", function (d) {return parseInt(d["Population"])/1000000000});
+            .attr("r", function (d) {return 5});
+            
+            }
+            
+        }
+        
+        // load csv
+        d3.csv("./Gapminder_All_Time.csv", function (data, error) {
+            if (error) {
+                console.log("uh oh")
+            } else {
+                console.log("data loaded");
+                dataset = data;
+                getVis();
+            }
+            
+        });
+
+    </script>
+</body>
+
+</html>

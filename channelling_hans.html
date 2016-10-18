@@ -3,18 +3,21 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ugh</title>
+    <title>gapminder</title>
     <!--    using d3 api, will need internet connection -->
     <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
 
 </head>
 
 <body>
+<!--    <input type="button" onclick="incrementValue()" value="increase year">-->
     <script type="text/javascript">
         // global var to hold contents of csv
         var dataset;
-        var height = 200
-        var width = 1200
+        var height = 200;
+        var width = 1200;
+        var counter = -1;
+        
         // Create SVG element
         d3.select("body")
             .append("svg")
@@ -23,31 +26,48 @@
             .attr("height", height);
 
         // select svg for later use
-        svg = d3.select("svg");
+        var svg = d3.select("svg");
 
-        getVis = function () {
-            console.log("ughhh", dataset);
+        getVis = function (year_data) {   
+            console.log("getvis", year_data[0]);
+            //remove all old circles
+            svg.selectAll("circle").remove();
             
-            for(i=0; i<1; i++){
-                svg.selectAll("circle")
-                .data(dataset)
-                .enter()
-                .append("circle")
-                .attr("cx", function (d) {return parseInt(d["GDP"])/100})
-                .attr("cy", function (d) {return height - parseInt(d["LifeExp"])})
-                .attr("r", function (d) {return parseInt(d["Population"])/100000000});
-            }
+            //create new circles
+            svg.selectAll("circle")
+            .data(year_data)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) {return parseInt(d["GDP"])/100})
+            .attr("cy", function (d) {return height - parseInt(d["LifeExp"])})
+            // map to area not radius!, pi*r**2 sqrt(r)/pi
+            .attr("r", function (d) {return (Math.sqrt(parseInt(d.Population))/Math.PI)/1000})
             
+        }
+        
+        sort_data = function(data) {
+            return d3.nest()
+                  .key(function(d) { return d.Year})
+                  .entries(data);
         }
         
         // load csv
         d3.csv("./Gapminder_All_Time.csv", function (data, error) {
             if (error) {
-                console.log("uh oh")
+                console.log("error loading csv")
             } else {
                 console.log("data loaded");
-                dataset = data;
-                getVis();
+                dataset=sort_data(data);                
+                
+                // crete a button once data is loaded
+                var b = document.createElement("button");
+                b.innerHTML = "increment year";
+                b.onclick = function(){
+                    counter++;
+                    console.log(counter);
+                    getVis(dataset[counter].values);
+                };
+                document.body.appendChild(b);
             }
             
         });

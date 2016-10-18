@@ -14,9 +14,10 @@
     <script type="text/javascript">
         // global var to hold contents of csv
         var dataset;
-        var height = 200;
-        var width = 1200;
+        var height = 300;
+        var width = "100%";
         var counter = -1;
+        var regions = {"Asia": "red", "Oceania": "red", "Europe": "yellow", "Africa":"blue", "North America": "green", "South America": "green", "Central America": "green"}
         
         // Create SVG element
         d3.select("body")
@@ -28,8 +29,7 @@
         // select svg for later use
         var svg = d3.select("svg");
 
-        getVis = function (year_data) {   
-            console.log("getvis", year_data[0]);
+        getVis = function (year_data) {
             //remove all old circles
             svg.selectAll("circle").remove();
             
@@ -41,10 +41,32 @@
             .attr("cx", function (d) {return parseInt(d["GDP"])/100})
             .attr("cy", function (d) {return height - parseInt(d["LifeExp"])})
             // map to area not radius!, pi*r**2 sqrt(r)/pi
-            .attr("r", function (d) {return (Math.sqrt(parseInt(d.Population))/Math.PI)/1000})
+            .attr("r", function (d) {return (Math.sqrt(parseInt(d.Population))/Math.PI)/200})
+            
+            .style("fill", function(d){return regions[d.Region]})
+            .style("stroke", "black");
             
         }
         
+        //https://www.dashingd3js.com/svg-text-element
+        showYear = function(year_value){
+            //remove old text
+            svg.selectAll("text").remove();
+            
+            //add new text
+            svg.selectAll("text")
+            .data(year_value)
+            .enter()
+            .append("text")
+            .attr("x", 5)
+            .attr("y", 50)
+            .text(year_value)
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "50px")
+            .attr("fill", "grey");
+        }
+        
+        //http://learnjsdata.com/group_data.html
         sort_data = function(data) {
             return d3.nest()
                   .key(function(d) { return d.Year})
@@ -56,7 +78,7 @@
             if (error) {
                 console.log("error loading csv")
             } else {
-                console.log("data loaded");
+                console.log("data loaded", data);
                 dataset=sort_data(data);                
                 
                 // crete a button once data is loaded
@@ -64,9 +86,11 @@
                 b.innerHTML = "increment year";
                 b.onclick = function(){
                     counter++;
-                    console.log(counter);
+                    showYear(dataset[counter].key)
                     getVis(dataset[counter].values);
                 };
+                linebreak = document.createElement("br");
+                document.body.appendChild(linebreak);
                 document.body.appendChild(b);
             }
             

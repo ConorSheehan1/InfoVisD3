@@ -12,22 +12,59 @@
 <body>
 <!--    <input type="button" onclick="incrementValue()" value="increase year">-->
     <script type="text/javascript">
-        // global var to hold contents of csv
+        // globals
         var dataset;
-        var height = 300;
-        var width = "100%";
-        var counter = -1;
+        // Define margins
+        var margin = {top: 10, right: 10, bottom: 25, left: 25};
+        var height = 600;
+        var width = 1200;
+        
+        var inner_height = height-margin.top-margin.bottom;
+        var inner_width = width-margin.left-margin.right;
+        
         var regions = {"Asia": "red", "Oceania": "red", "Europe": "yellow", "Africa":"blue", "North America": "green", "South America": "green", "Central America": "green"}
+        var counter = -1;
+        var xScale;
+        var yScale;
         
         // Create SVG element
         d3.select("body")
             .append("svg")
             .style("background", "aliceblue")
             .attr("width", width)
-            .attr("height", height);
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");;
 
         // select svg for later use
         var svg = d3.select("svg");
+        
+        getAxis = function(){
+            // Create an x-axis connected to the x scale
+				var xAxis = d3.svg.axis()
+							  .scale(xScale)
+                            .ticks(10)
+							  .orient("bottom");
+	
+				//Define Y axis
+				var yAxis = d3.svg.axis()
+                              .scale(yScale)
+                            .ticks(10)
+                              .orient("left");
+							  
+				// Call the x-axis
+				svg.append("g")
+					.attr("class", "axis")
+                    .attr("transform", "translate(0," + inner_height + ")")
+					.call(xAxis);
+					
+				// Call the y axis
+				svg.append("g")
+					.attr("class", "axis")
+                .attr("transform", "translate (" + 50 + " 0)")
+					.call(yAxis);
+
+        }
 
         getVis = function (year_data) {
             //remove all old circles
@@ -38,11 +75,11 @@
             .data(year_data)
             .enter()
             .append("circle")
-            .attr("cx", function (d) {return parseInt(d["GDP"])/100})
-            .attr("cy", function (d) {return height - parseInt(d["LifeExp"])})
+            .attr("cx", function (d) {return xScale(parseInt(d.GDP))})
+            .attr("cy", function (d) {return yScale(parseInt(d.LifeExp))})
+            
             // map to area not radius!, pi*r**2 sqrt(r)/pi
             .attr("r", function (d) {return (Math.sqrt(parseInt(d.Population))/Math.PI)/200})
-            
             .style("fill", function(d){return regions[d.Region]})
             .style("stroke", "black");
             
@@ -58,7 +95,7 @@
             .data(year_value)
             .enter()
             .append("text")
-            .attr("x", 5)
+            .attr("x", 60)
             .attr("y", 50)
             .text(year_value)
             .attr("font-family", "sans-serif")
@@ -79,7 +116,20 @@
                 console.log("error loading csv")
             } else {
                 console.log("data loaded", data);
-                dataset=sort_data(data);                
+                // group data by year
+                dataset=sort_data(data);   
+                
+                // create scales
+                xScale = d3.scale.log()
+	            				.domain([d3.min(data, function(d){return +d.GDP}), d3.max(data, function(d){return +d.GDP})])
+								.range([margin.left, inner_width]);
+                
+                yScale = d3.scale.linear()
+	            				.domain([d3.min(data, function(d){return +d.LifeExp}), d3.max(data, function(d){return +d.LifeExp})])
+								.range([inner_height, 0]);
+                                
+                // create axes
+                getAxis();
                 
                 // crete a button once data is loaded
                 var b = document.createElement("button");
@@ -89,6 +139,8 @@
                     showYear(dataset[counter].key)
                     getVis(dataset[counter].values);
                 };
+                
+                // add a linebreak before the button
                 linebreak = document.createElement("br");
                 document.body.appendChild(linebreak);
                 document.body.appendChild(b);

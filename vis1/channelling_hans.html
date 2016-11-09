@@ -1,27 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="tas-com">
 <head>
     <meta charset="utf-8">
-    <title>Gapminder</title>
+    <title>conor sheehan 15203739</title>
     <!--    using d3 api, will need internet connection -->
-    <script src="http://d3js.org/d3.v3.js"></script>
+<!--    <script src="http://d3js.org/d3.v3.js"></script>-->
+    
+    <script src="../d3/d3.min.js"></script>
+    
     <!--    reset browser default styling-->
-    <link rel="stylesheet" type="text/css" href="reset.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../reset.css">
+    <link rel="stylesheet" type="text/css" href="../style.css">
     <div class="body"></div>
     <div class="legend"></div>
-    
 
 </head>
 <body>
-    
-    <script>
-     
-//http://bl.ocks.org/weiglemc/6185069
+    <script type="text/javascript">
+        //http://bl.ocks.org/weiglemc/6185069
         // create placeholder div to hold country name and move
-        console.log("ugh");
-
         var tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);    
@@ -29,25 +26,23 @@
         // globals
         var dataset;
         var margin = {top: 20, right: 20, bottom: 20, left: 20};
-        var height = 600;
-        var width = 1000;
+        var height = 700;
+        var width = 1400;
         
         var inner_height = height - margin.top - margin.bottom;
         var inner_width = width - margin.left - margin.right;
         
         var button;
-        var regions = {"Asia":"red", "Europe": "green", "Africa": "blue", "North America": "cyan", "South America": "magenta", "Australia":"yellow",
-                    "Central America": "orange", "Oceania": "black"};
         
-        var xScale;
-        var yScale;
-        var xAxis;
-        var yAxis;
+//      http://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=8
+//      rather than using colorbrewer I used the values provided in the slides
+//      https://dl.dropboxusercontent.com/content_link/qbQb6JlpCdtFkEdBL9gx5jyNmA4Fyx2KD90aQBsBUVr8cv1n3Ovlxcmw8ql14d5e/file        
+        var regions = {"Asia":"#FF5558", "Europe": "#2B7E2C", "Africa": "#FFFC59", "North America": "#5959FF", "South America": "#986631", "Australia":"#FD57EF", "Central America": "#59FDFF", "Oceania": "#000000"};
         
         // select body for later use
         var body = d3.select(".body");
         var stop;
-        var counter = 0;
+        var counter = -1;
         var switch_count = 0;
         var animation_time = 500;
         var legend_counter = 0;
@@ -75,14 +70,14 @@
             
             // function to show/hide regions on click of legend
             // include counter attribute for each legend to keep track of clicks
-            .on("click",function(){
+            .on("click",function(){ 
                 var ths = d3.select(this);
                 var cls = ths.attr("class");
                 var cntr = ths.attr("count");
                 var circles = d3.selectAll("." + cls.replace(/\s+/g, "_"));
                 
                 if(cntr==0){
-                    circles.style("opacity", "0.2");
+                    circles.style("opacity", "0.1");
                     ths.attr("count", 1);
                 } else{
                     circles.style("opacity", "1.0");
@@ -97,6 +92,13 @@
             legend.append("br");
         }
         
+        updateSlider = function(counter){
+            // use property instead of attribute to get it to update!!
+            // http://stackoverflow.com/questions/35631631/d3-js-selection-not-working
+            d3.select("input[type=range]").property("value", counter);
+            // can't use transition with property "/
+        }
+        
         // create axis
         getAxis = function(){
             // add labels
@@ -104,7 +106,7 @@
                 .attr("text-anchor", "end")
                 .attr("x", width/2)
                 .attr("y", height - 5)
-                .text("GDP ($100k)");
+                .text("$GDP per capita");
             
             svg.append("text")
                 .attr("text-anchor", "end")
@@ -118,9 +120,10 @@
 				xAxis = d3.svg.axis()
 						.scale(xScale)                        
                         .ticks(5)
-                        .tickFormat(function(d){
-                            return d/100;
-                        })  
+                        .tickFormat(function (d) {
+                            var prefix = d3.formatPrefix(d);
+                            return prefix.scale(d) + prefix.symbol;
+                        })
 						.orient("bottom");
 	
 				//Define Y axis
@@ -157,10 +160,10 @@
             
             //update (change existing circles)
             circles.transition().duration(animation_time)
-            .attr("cx", function (d) {return xScale(parseInt(d.GDP))})
-            .attr("cy", function (d) {return yScale(parseInt(d.LifeExp))})
+            .attr("cx", function (d) {return xScale(+d.GDP)})
+            .attr("cy", function (d) {return yScale(+d.LifeExp)})
             // map to area not radius!, pi*r**2 sqrt(r)/pi
-            .attr("r", function (d) {return (Math.sqrt(parseInt(d.Population))/Math.PI)/200})
+            .attr("r", function (d) {return (Math.sqrt(+d.Population)/Math.PI)/200})
             .style("fill", function(d){return regions[d.Region]})
             .style("stroke", "black");
             
@@ -171,18 +174,30 @@
             .attr("class", function(d){var str = d.Region; return str.replace(/\s+/g, "_")})
             .attr("r", 0)
             .transition().duration(1000).ease("bounce")
-            .attr("cx", function (d) {return xScale(parseInt(d.GDP))})
-            .attr("cy", function (d) {return yScale(parseInt(d.LifeExp))})
-            // map to area not radius!, pi*r**2 sqrt(r)/pi
-            .attr("r", function (d) {return (Math.sqrt(parseInt(d.Population))/Math.PI)/200})
+            .attr("cx", function (d) {return xScale(+d.GDP)})
+            .attr("cy", function (d) {return yScale(+d.LifeExp)})
+            
+            // map population to area not radius!, pi*r**2 inv -> sqrt(r)/pi
+            .attr("r", function (d) {return (Math.sqrt(+d.Population)/Math.PI)/200})
+            
             .style("fill", function(d){return regions[d.Region]})
             .style("stroke", "black");
             
+            //exit (remove circles that don't have data associated)
+            circles.exit()
+                .transition().duration(animation_time).attr("r", 0).style("opacity", "0")
+                .remove(); 
+             
             // add country names on mouseover
             //http://bl.ocks.org/weiglemc/6185069
             circles.on("mouseover", function(d) {
+                // get legend with same class as current bubble
+                var cnt = d3.selectAll("svg").filter("."+d3.select(this).attr("class")).attr("count");
+                
+                // only show country name if region is enabled (by chart legend)
+                if(cnt == 0){                
                   //highlight circle
-                  d3.select(this).transition().duration(10).attr("stroke-width", "5").style("stroke", "yellow");
+                  d3.select(this).transition().duration(10).style("stroke", "yellow");
                   
                   // set text to country 
                   tooltip.html(d.Country)
@@ -193,21 +208,18 @@
                   tooltip.transition()
                        .duration(200)
                        .style("opacity", 1.0);
+                }
               })
+            
             circles.on("mouseout", function(d) {
                   // unhighlight circle
-                  d3.select(this).transition().duration(10).attr("stroke-width", "1").style("stroke", "black");
+                  d3.select(this).transition().duration(10).style("stroke", "black");
                 
                   // hide div
                   tooltip.transition()
                        .duration(500)
                        .style("opacity", 0);
               });
-            
-            //exit (remove circles that don't have data associated)
-            circles.exit()
-                .transition().duration(animation_time).attr("r", 0).style("opacity", "0")
-                .remove();            
         }
         
         //https://www.dashingd3js.com/svg-text-element
@@ -228,6 +240,7 @@
             .attr("fill", "grey");
         }
         
+        
         //http://learnjsdata.com/group_data.html
         //rather than filtering data every call, just group by year right at the start
         sort_data = function(data) {            
@@ -237,7 +250,7 @@
         }
         
         // load csv (I'm leaving the console log here just in case the data doesn't load)
-        d3.csv("Gapminder_All_Time.csv", function (error, data) {
+        d3.csv("../Gapminder_All_Time.csv", function (error, data) {
             if (error) {
                 console.log("error loading csv")
             } else {
@@ -266,6 +279,7 @@
                     showYear(dataset[counter].key);
                     // move circles
                     getVis(dataset[counter].values);
+                    updateSlider(counter);
                 }
                 
                 // function to toggle pause and play
@@ -295,21 +309,22 @@
                       .on("click", pause_play);
                 
                 // add a slider for years
-                body.append("input")
+               body.append("input")
                   .attr("type", "range")
                   .attr("min", -1)
                   .attr("max", dataset.length-2)
                   .attr("value", counter)
+                  .attr("id", "slider")
                   // update counter (index value in csv), the call animate function to update chart
                   .on("change", function() {counter = this.value; animate()});
 
                 
                 // create initial visualisation when page loads
-                showYear(dataset[counter].key)
-                getVis(dataset[counter].values);
+//                showYear(dataset[counter].key)
+//                getVis(dataset[counter].values);
+                animate();
             }          
         });
     </script>
-    
 </body>
 </html>

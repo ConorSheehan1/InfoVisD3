@@ -11,7 +11,7 @@
 	* Countries from a hidden region will not be selectable.
 
 ## Vis 2 gdp\_by\_gov.html
-###Available at: [https://conorsworldmap.herokuapp.com/](https://conorsworldmap.herokuapp.com/)
+### Available at: [https://conorsworldmap.herokuapp.com/](https://conorsworldmap.herokuapp.com/)
 
 ##### Features
 * Hover over bars in barchart to only show countries with selected government	

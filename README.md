@@ -1,3 +1,10 @@
+### Local setup
+vis1 and vis2 require resources in the root directory (css and js).  
+In order to run this locally you'll need to start a webserver in the root of this repo. e.g.  
+```
+python3 -m http.server
+```
+
 ## Vis 1 channelling\_hans.html 
 ### Available at: [https://conorsgapminder.herokuapp.com/](https://conorsgapminder.herokuapp.com/)
 

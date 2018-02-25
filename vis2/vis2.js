@@ -1,35 +1,5 @@
 window.onload = function(){
 
-    // function loadJSON(filePath, callback) {   
-    //     var xobj = new XMLHttpRequest();
-    //     xobj.overrideMimeType("application/json");
-    //     xobj.open('GET', filePath, true); // Replace 'my_data' with the path to your file
-    //     xobj.onreadystatechange = function () {
-    //           if (xobj.readyState == 4 && xobj.status == "200") {
-    //             // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-    //             callback(xobj.responseText);
-    //           }
-    //     };
-    //     xobj.send(null);  
-    //  }
-
-    // function LoadJSON(filePath) {}
-    //     new Request.JSON({
-    //         url : e.target.action, 
-    //         onRequest : function(){
-    //             console.log("request " + filePath);
-    //         },
-    //         onComplete : function(){
-    //             console.log("load " + filePath + " complete");
-    //         },
-    //         onSuccess : function(resp){
-    //             var j = resp;
-    //             if (!j) return false;
-    //             return j;
-    //         }
-    //     }).send(this);
-    // }
-
     // https://datamaps.github.io/  
     // https://github.com/markmarkoh/datamaps/blob/master/README.md#getting-started
     var counter = -1;
@@ -64,12 +34,6 @@ window.onload = function(){
     // empty global object to hold color for each government type
     var defaultData = {};
     var codes = country_codes;
-    
-    // //python generated json blob included in head of gdb_by_gov.html
-    //  loadJSON("country_codes.json", function(response) {
-    //     // Parse JSON string into object
-    //     var codes = JSON.parse(response);
-    //  });
         
     // group data by year
     sort_data = function(data) {            

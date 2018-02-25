@@ -22,7 +22,7 @@ window.onload = function() {
     var regions = {"Asia":"#FF5558", "Europe": "#2B7E2C", "Africa": "#FFFC59", "North America": "#5959FF", "South America": "#986631", "Australia":"#FD57EF", "Central America": "#59FDFF", "Oceania": "#000000"};
     
     // select body for later use
-    var body = d3.select(".body");
+    var body = d3.select(".vis");
     var stop;
     var counter = -1;
     var switch_count = 0;
@@ -31,10 +31,13 @@ window.onload = function() {
     
     // Create SVG element
     body.append("svg")
-        .attr("width", width)
-        .attr("height", height)
+        // .attr("width", "100%")
+        // .attr("height", "auto")
+        // this scales the svg but isn't necessarily perfect because it doesn't scale child svgs 
+        // and makes zooming in/out on the svg impossible
+        .attr("viewBox", "0 0 1400 700")
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // select svg for later use
     var svg = d3.select("svg");

@@ -14,7 +14,8 @@ window.onload = function() {
     var inner_height = height - margin.top - margin.bottom;
     var inner_width = width - margin.left - margin.right;
     
-    var button;
+    var play_button;
+    var control_button;
         
     //      http://colorbrewer2.org/#type=qualitative&scheme=Dark2&n=8
     //      rather than using colorbrewer I used the values provided in the slides
@@ -22,20 +23,24 @@ window.onload = function() {
     var regions = {"Asia":"#FF5558", "Europe": "#2B7E2C", "Africa": "#FFFC59", "North America": "#5959FF", "South America": "#986631", "Australia":"#FD57EF", "Central America": "#59FDFF", "Oceania": "#000000"};
     
     // select body for later use
-    var body = d3.select(".vis");
+    var vis_body = d3.select(".vis");
     var stop;
     var counter = -1;
-    var switch_count = 0;
     var animation_time = 500;
     var legend_counter = 0;
+
+    var showing_controls = true;
+    var playing = false;
     
     // Create SVG element
-    body.append("svg")
+    vis_body.append("svg")
+        .attr("width", width)
+        .attr("height", height)
         // .attr("width", "100%")
         // .attr("height", "auto")
         // this scales the svg but isn't necessarily perfect because it doesn't scale child svgs 
         // and makes zooming in/out on the svg impossible
-        .attr("viewBox", "0 0 1400 700")
+        // .attr("viewBox", "0 0 1400 700")
         .append("g")
         // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -58,10 +63,10 @@ window.onload = function() {
         .on("click",function(){ 
             var ths = d3.select(this);
             var cls = ths.attr("class");
-            var cntr = ths.attr("count");
+            var countr = ths.attr("count");
             var circles = d3.selectAll("." + cls.replace(/\s+/g, "_"));
             
-            if(cntr==0){
+            if(countr==0){
                 circles.style("opacity", "0.1");
                 ths.attr("count", 1);
             } else{
@@ -77,15 +82,14 @@ window.onload = function() {
         legend.append("br");
     }
     
-    updateSlider = function(counter){
+    function updateSlider(counter){
         // use property instead of attribute to get it to update!!
         // http://stackoverflow.com/questions/35631631/d3-js-selection-not-working
         d3.select("input[type=range]").property("value", counter);
         // can't use transition with property "/
     }
     
-    // create axis
-    getAxis = function(){
+    function createAxis(){
         // add labels
         svg.append("text")
             .attr("text-anchor", "end")
@@ -102,71 +106,70 @@ window.onload = function() {
             .text("life expectancy (years)");
         
         // Create an x-axis connected to the x scale
-    xAxis = d3.svg.axis()
-        .scale(xScale)                        
+        xAxis = d3.svg.axis()
+                    .scale(xScale)                        
                     .ticks(5)
                     .tickFormat(function (d) {
                         var prefix = d3.formatPrefix(d);
                         return prefix.scale(d) + prefix.symbol;
                     })
-        .orient("bottom");
+                    .orient("bottom");
 
-    //Define Y axis
-    yAxis = d3.svg.axis()
+        //Define Y axis
+        yAxis = d3.svg.axis()
                     .scale(yScale)
                     .ticks(10)
                     .orient("left");
-            
-    // Call the x-axis
-    svg.append("g")
-                .attr("class", "axis")
-            
-                .attr("transform", "translate(0," + inner_height + ")")
-      .call(xAxis);
-      
-    // Call the y axis
-    svg.append("g")
-                .attr("class", "axis")
-                .attr("transform", "translate (" + 50 + " 0)")
-      .call(yAxis);
+                
+        // Call the x-axis
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + inner_height + ")")
+            .call(xAxis);
+          
+        // Call the y axis
+        svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate (" + 50 + " 0)")
+            .call(yAxis);
     }
 
     // main function to display circles
-    getVis = function (year_data) {   
+    function createVis(year_data) {   
         //// find unique values for region
         // console.log(d3.map(year_data, function(d){return d.Region}).keys());
         
         // create axis every loop??
-        getAxis();
+        createAxis();
         
         //create new circles
         var circles = svg.selectAll("circle")
-        .data(year_data, function key(d){return d.Country;})
+            .data(year_data, function key(d){return d.Country;})
         
         //update (change existing circles)
         circles.transition().duration(animation_time)
-        .attr("cx", function (d) {return xScale(+d.GDP)})
-        .attr("cy", function (d) {return yScale(+d.LifeExp)})
-        // map to area not radius!, pi*r**2 sqrt(r)/pi
-        .attr("r", function (d) {return (Math.sqrt(+d.Population)/Math.PI)/200})
-        .style("fill", function(d){return regions[d.Region]})
-        .style("stroke", "black");
+            .attr("cx", function (d) {return xScale(+d.GDP)})
+            .attr("cy", function (d) {return yScale(+d.LifeExp)})
+            // map to area not radius!, pi*r**2 sqrt(r)/pi
+            .attr("r", function (d) {return (Math.sqrt(+d.Population)/Math.PI)/200})
+            .style("fill", function(d){return regions[d.Region]})
+            .style("stroke", "black");
         
         //enter (need to add new circles because they don't exist yet)
         circles.enter()
-        .append("circle")
-        // replace spaces with underscores, for class name
-        .attr("class", function(d){var str = d.Region; return str.replace(/\s+/g, "_")})
-        .attr("r", 0)
-        .transition().duration(1000).ease("bounce")
-        .attr("cx", function (d) {return xScale(+d.GDP)})
-        .attr("cy", function (d) {return yScale(+d.LifeExp)})
-        
-        // map population to area not radius!, pi*r**2 inv -> sqrt(r)/pi
-        .attr("r", function (d) {return (Math.sqrt(+d.Population)/Math.PI)/200})
-        
-        .style("fill", function(d){return regions[d.Region]})
-        .style("stroke", "black");
+            .append("circle")
+            // replace spaces with underscores, for class name
+            .attr("class", function(d){var str = d.Region; return str.replace(/\s+/g, "_")})
+            .attr("r", 0)
+            .transition().duration(1000).ease("bounce")
+            .attr("cx", function (d) {return xScale(+d.GDP)})
+            .attr("cy", function (d) {return yScale(+d.LifeExp)})
+            
+            // map population to area not radius!, pi*r**2 inv -> sqrt(r)/pi
+            .attr("r", function (d) {return (Math.sqrt(+d.Population)/Math.PI)/200})
+            
+            .style("fill", function(d){return regions[d.Region]})
+            .style("stroke", "black");
         
         //exit (remove circles that don't have data associated)
         circles.exit()
@@ -177,10 +180,10 @@ window.onload = function() {
         //http://bl.ocks.org/weiglemc/6185069
         circles.on("mouseover", function(d) {
             // get legend with same class as current bubble
-            var cnt = d3.selectAll("svg").filter("."+d3.select(this).attr("class")).attr("count");
+            var count = d3.selectAll("svg").filter("."+d3.select(this).attr("class")).attr("count");
             
             // only show country name if region is enabled (by chart legend)
-            if(cnt == 0){                
+            if(count == 0){                
               //highlight circle
               d3.select(this).transition().duration(10).style("stroke", "yellow");
               
@@ -194,21 +197,21 @@ window.onload = function() {
                    .duration(200)
                    .style("opacity", 1.0);
             }
-          })
+        });
         
         circles.on("mouseout", function(d) {
-              // unhighlight circle
-              d3.select(this).transition().duration(10).style("stroke", "black");
+            // unhighlight circle
+            d3.select(this).transition().duration(10).style("stroke", "black");
             
-              // hide div
-              tooltip.transition()
-                   .duration(500)
-                   .style("opacity", 0);
-          });
+            // hide div
+            tooltip.transition()
+               .duration(500)
+               .style("opacity", 0);
+        });
     }
     
     //https://www.dashingd3js.com/svg-text-element
-    showYear = function(year_value){
+    function showYear(year_value){
         //remove old text
         svg.selectAll("text").remove();
         
@@ -228,7 +231,7 @@ window.onload = function() {
     
     //http://learnjsdata.com/group_data.html
     //rather than filtering data every call, just group by year right at the start
-    sort_data = function(data) {            
+    function sort_data(data) {            
         return d3.nest()
               .key(function(d) { return d.Year})
               .entries(data);
@@ -253,7 +256,7 @@ window.onload = function() {
             .range([inner_height, 20]);
             
             // function to step through values in dataset
-            animate = function(){
+            function animate(){
                 counter++;
                 // wrap counter back to start
                 // better than modulo I think
@@ -263,50 +266,66 @@ window.onload = function() {
                 // increment year value on canvas
                 showYear(dataset[counter].key);
                 // move circles
-                getVis(dataset[counter].values);
+                createVis(dataset[counter].values);
                 updateSlider(counter);
             }
             
             // function to toggle pause and play
-            pause_play = function(){
-                if (switch_count % 2 == 0){
-                    stop = setInterval(animate, animation_time);
-                    button.attr("value", "pause");
-                }else {
+            function pause_play(){
+                if (playing) {
                     clearInterval(stop);
-                    button.attr("value", "play");
+                    play_button.attr("value", "play");
+                    playing = false;
+                } else {
+                    stop = setInterval(animate, animation_time);
+                    play_button.attr("value", "pause");
+                    playing = true;
                 }
-                switch_count ++;
-            };                
+            };
+
+            function show_hide_controls(){
+                if (showing_controls) {
+                    legend.style("display", "none");
+                    control_button.attr("value", "show controls")
+                    showing_controls = false;
+                } else {
+                    legend.style("display", "inline-block");
+                    control_button.attr("value", "hide controls")
+                    showing_controls = true;
+                }
+            }
             
             // add line break before buttons so they're always below canvas
-            body.append("br")
+            vis_body.append("br")
             
             // add pause/play button
-            button = body.append("input")
-                  .attr("type", "button")
-                  .attr("value", "play")
-                  .style("border-radius", "20px")
-                  .style("background", "#50555C")
-                  .style("color", "white")
-                  .style("height", "23px")
-                  .style("min-width", "60px")
-                  .on("click", pause_play);
+            play_button = vis_body.append("input")
+                .attr("type", "button")
+                .attr("value", "play")
+                .attr("class", "vis-button")
+                .on("click", pause_play);
             
             // add a slider for years
-           body.append("input")
-              .attr("type", "range")
-              .attr("min", -1)
-              .attr("max", dataset.length-2)
-              .attr("value", counter)
-              .attr("id", "slider")
-              // update counter (index value in csv), the call animate function to update chart
-              .on("change", function() {counter = this.value; animate()});
+            vis_body.append("input")
+                .attr("type", "range")
+                .attr("min", -1)
+                .attr("max", dataset.length-2)
+                .attr("value", counter)
+                .attr("id", "slider")
+                // update counter (index value in csv), the call animate function to update chart
+                .on("change", function() {counter = this.value; animate()});
+
+
+            control_button = vis_body.append("input")
+                .attr("type", "button")
+                .attr("value", "hide controls")
+                .attr("class", "vis-button")
+                .on("click", show_hide_controls);
 
             
             // create initial visualisation when page loads
             // showYear(dataset[counter].key)
-            // getVis(dataset[counter].values);
+            // createVis(dataset[counter].values);
             animate();
         }          
     });

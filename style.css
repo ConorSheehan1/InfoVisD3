@@ -3,6 +3,14 @@
   height:auto;
 }
 
+.vis-button {
+  border-radius: 20px;
+  background: #50555C;
+  color: white;
+  height: 23px;
+  min-width: 60px;
+}
+
 .tooltip {
   position: absolute;
   width: 150px;

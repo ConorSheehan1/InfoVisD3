@@ -37,7 +37,7 @@ window.onload = function() {
         .attr("width", width)
         .attr("height", height)
         // .attr("width", "100%")
-        // .attr("height", "auto")
+        // .attr("height", 700 )
         // this scales the svg but isn't necessarily perfect because it doesn't scale child svgs 
         // and makes zooming in/out on the svg impossible
         // .attr("viewBox", "0 0 1400 700")
@@ -220,8 +220,8 @@ window.onload = function() {
         .data(year_value)
         .enter()
         .append("text")
-        .attr("x", 60)
-        .attr("y", 50)
+        .attr("x", 70)
+        .attr("y", 600)
         .text(year_value)
         .attr("font-family", "sans-serif")
         .attr("font-size", "50px")

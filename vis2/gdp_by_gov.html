@@ -4,14 +4,7 @@
         <meta charset="utf-8">
         <!--    reset browser default styling-->
         <link rel="stylesheet" type="text/css" href="../reset.css">
-        <link rel="stylesheet" type="text/css" href="../style.css"> 
-        
-        <!--    override slider width-->
-        <style>
-            input[type=range] {
-                width: 50%;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="../style.css">       
         
         <script src="../d3/d3.min.js"></script>
         <script src="topojson.min.js"></script>
@@ -20,9 +13,9 @@
         <script src="vis2.js"></script>
     </head>
     <body>    
-        <title>vis2 conor sheehan 15203739</title>
-        <div id="barchart" style="position: relative; width:60%; height: 300px;"></div>
-        <div id="container" style="position: relative; width:60%; height: 400px;"></div>
-        <div class="legend"></div>
+        <title>ConorS Gapminder</title>
+        <div id="barchart" class="center-vis" style="height:300px;"></div>
+        <div id="map-container" class="center-vis"></div>
+        <div class="controls center-vis"></div>
     </body>
 </html>

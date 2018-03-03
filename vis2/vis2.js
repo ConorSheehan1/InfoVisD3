@@ -11,7 +11,7 @@ window.onload = function(){
     var updateCounter = 0;
     var datasrc;
     var body = d3.select("body");
-    var legend = d3.select(".legend");
+    var controls = d3.select(".controls");
     
     //from notes
     var margin = {top: 10, right: 20, bottom: 25, left: 250};
@@ -28,7 +28,7 @@ window.onload = function(){
     var yAxis;
     
     // create datamap
-    var map = new Datamap({element: document.getElementById('container'), fills: {defaultFill: "#FFFFFF"},  
+    var map = new Datamap({element: document.getElementById('map-container'), fills: {defaultFill: "#FFFFFF"},  
                            geographyConfig: {highlightFillColor: '#000000', borderColor: '#000000'}});
     
     // empty global object to hold color for each government type
@@ -252,7 +252,7 @@ window.onload = function(){
                       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
               // add text for year
-              d3.select("#container svg").append("text").attr("id", "year").attr("x", 5).attr("y", 350)
+              d3.select("#map-container svg").append("text").attr("id", "year").attr("x", 5).attr("y", 350)
               .attr("font-family", "sans-serif").attr("font-size", "50px").attr("fill", "grey");
 
               // stuff for barchart
@@ -311,7 +311,7 @@ window.onload = function(){
 
               // add pause/play button
               body.append("br")
-              button = body.append("input")
+              button = controls.append("input")
                     .attr("type", "button")
                     .attr("value", "play")
                     .style("border-radius", "20px")
@@ -322,7 +322,7 @@ window.onload = function(){
                     .on("click", pause_play);
 
               // add a slider for years
-              body.append("input")
+              controls.append("input")
                 .attr("type", "range")
                 .attr("min", -1)
                 .attr("max", dataset.length-2)
@@ -331,7 +331,7 @@ window.onload = function(){
                 .on("change", function() {counter = this.value; animate()});
 
 
-              updateButton = body.append("input")
+              updateButton = controls.append("input")
                     .attr("type", "button")
                     .attr("value", "change data")
                     .style("border-radius", "20px")

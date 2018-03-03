@@ -3,6 +3,11 @@
   height:auto;
 }
 
+.legend {
+  float:right;
+  padding-right:2%;
+}
+
 .vis-button {
   border-radius: 20px;
   background: #50555C;
@@ -55,7 +60,7 @@ input[type=range] {
   -webkit-appearance: none;
   margin: 0;
   padding-bottom: 0;
-  width: 80%;
+  width: 70%;
 }
 input:focus {
   outline: none;

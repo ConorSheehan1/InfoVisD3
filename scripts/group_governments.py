@@ -1,24 +1,44 @@
 import pandas as pd
-
-df = pd.read_csv("../data/Gapminder_All_Time.csv")
-
-print("Before:\nnumber of governments:\n", len(df["Government"].unique()), df["Government"].unique(), "\n")
-
-# get rid of territories (puerto rico etc.)
-df = df[df.Government.str.contains("territory") == False]
+import os
 
 
-def rep(df, val):
-    govs = df[df.Government.str.contains(val)]["Government"].unique()
+class GroupGovernments:
+    def __init__(self):
+        self.current_path = os.path.abspath(os.path.dirname(__file__))
+        self.data_dir = os.path.join(self.current_path, '..', 'data')
+        self.gapminder_path = os.path.join(self.data_dir, 'Gapminder_All_Time.csv')
+        self.df = pd.read_csv(self.gapminder_path)
+        self.print_stats(num_msg="number of governments")
 
-    for gov in govs:
-        df.replace(gov, val, inplace=True)
+    def get_stats(self):
+        unique_governments = self.df["Government"].unique()
+        return len(unique_governments), unique_governments
 
-# any government containing the word republic or monarchy is grouped together
-rep(df, "republic")
-rep(df, "monarchy")
+    # num_msg: str
+    # list_msg: str
+    def print_stats(self, num_msg="", list_msg=""):
+        num_govs, list_of_govs = self.get_stats()
+        if num_msg: print(f"{num_msg}: {num_govs}")
+        if list_msg: print(f"{list_msg}: {list_of_govs}\n")
 
-print("After:\nnumber of governments:\n", len(df["Government"].unique()), df["Government"].unique())
+    # val: str
+    def group_in_place(self, val):
+        selector = self.df.Government.str.contains(val)
+        governments = self.df[selector]["Government"].unique()
 
-# export
-df.to_csv('../governments_grouped.csv', index=False)
+        for gov in governments:
+            self.df.replace(gov, val, inplace=True)
+
+        self.print_stats(num_msg="number of governments")
+
+    # file_name: str
+    def to_csv(self, file_name='governments_grouped'):
+        output_path = os.path.join(self.data_dir, f"{file_name}.csv")
+        self.df.to_csv(output_path, index=False)
+
+
+if __name__ == "__main__":
+    govs_obj = GroupGovernments()
+    govs_obj.group_in_place("republic")
+    govs_obj.group_in_place("monarchy")
+    govs_obj.to_csv('governments_grouped')

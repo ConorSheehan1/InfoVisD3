@@ -9,4 +9,4 @@ while y != "":
 
 # remove last trailing comma
 # fix space formatting in print
-print("var codes = {" + output[:-3].replace(",  ", ", ") + "};")
+print("{" + output[:-3].replace(",  ", ", ") + "};")

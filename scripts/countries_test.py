@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("../Gapminder_All_Time.csv")
+df = pd.read_csv("../data/Gapminder_All_Time.csv")
 countries = df.Country.unique()
 # print(countries)
 

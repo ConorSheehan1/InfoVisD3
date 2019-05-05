@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("../Gapminder_All_Time.csv")
+df = pd.read_csv("../data/Gapminder_All_Time.csv")
 
 print("Before:\nnumber of governments:\n", len(df["Government"].unique()), df["Government"].unique(), "\n")
 

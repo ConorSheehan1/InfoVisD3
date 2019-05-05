@@ -1,4 +1,4 @@
-var country_codes = {
+country_codes = {
   "Aruba": "ABW",
   "Afghanistan": "AFG",
   "Angola": "AGO",
@@ -246,4 +246,4 @@ var country_codes = {
   "South Africa": "ZAF",
   "Zambia": "ZMB",
   "Zimbabwe": "ZWE"
-};
+}

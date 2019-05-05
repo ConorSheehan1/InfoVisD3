@@ -1,44 +1,58 @@
 import pandas as pd
 import os
+from util.stats_mixin import StatsMixin
+from config.path_mixin import PathMixin
 
-
-class GroupGovernments:
-    def __init__(self):
-        self.current_path = os.path.abspath(os.path.dirname(__file__))
-        self.data_dir = os.path.join(self.current_path, '..', 'data')
-        self.gapminder_path = os.path.join(self.data_dir, 'Gapminder_All_Time.csv')
-        self.df = pd.read_csv(self.gapminder_path)
-        self.print_stats(num_msg="number of governments")
-
-    def get_stats(self):
-        unique_governments = self.df["Government"].unique()
-        return len(unique_governments), unique_governments
-
-    # num_msg: str
-    # list_msg: str
-    def print_stats(self, num_msg="", list_msg=""):
-        num_govs, list_of_govs = self.get_stats()
-        if num_msg: print(f"{num_msg}: {num_govs}")
-        if list_msg: print(f"{list_msg}: {list_of_govs}\n")
-
+class GroupGovernments(PathMixin, StatsMixin):
     # val: str
-    def group_in_place(self, val):
+    # replacement: str
+    def group_in_place(self, val, replacement=''):
+        if not replacement: replacement = val
+
         selector = self.df.Government.str.contains(val)
+        governments = self.df[selector]["Government"].unique()
         governments = self.df[selector]["Government"].unique()
 
         for gov in governments:
-            self.df.replace(gov, val, inplace=True)
+            self.df.replace(gov, replacement, inplace=True)
 
-        self.print_stats(num_msg="number of governments")
+        self.print_stats(num_msg="number of governments: ")
 
-    # file_name: str
-    def to_csv(self, file_name='governments_grouped'):
-        output_path = os.path.join(self.data_dir, f"{file_name}.csv")
-        self.df.to_csv(output_path, index=False)
+    def to_csv(self, *args, **kwargs):
+        self.print_stats(num_msg="number of governments: ", list_msg="list_of_governments:\n")
+        # super(PathMixin, self).to_csv(*args, **kwargs)
+        super(GroupGovernments, self).to_csv(*args, **kwargs)
+        # super().to_csv(*args, **kwargs)
 
 
-if __name__ == "__main__":
+def governments_grouped():
     govs_obj = GroupGovernments()
     govs_obj.group_in_place("republic")
     govs_obj.group_in_place("monarchy")
     govs_obj.to_csv('governments_grouped')
+
+def governments_grouped_broader():
+    govs_obj = GroupGovernments()
+
+    # get rid of territories (puerto rico etc.)
+    territory_selector = govs_obj.df.Government.str.contains("territory")
+    govs_obj.df = govs_obj.df[territory_selector == False]
+
+    # differentiate between types of republic
+    govs_obj.group_in_place("federal republic", "federal rep")
+    # exclude people's republic
+    govs_obj.group_in_place("people's republic", "people's rep")
+
+    # group monarchies together
+    govs_obj.group_in_place("monarchy")
+    govs_obj.group_in_place("republic")
+
+    # fix excluded republics
+    govs_obj.group_in_place("federal rep", "federal republic")
+    govs_obj.group_in_place("people's rep", "people's republic")
+    govs_obj.to_csv('governments_grouped_broader')
+
+
+if __name__ == "__main__":
+    governments_grouped()
+    governments_grouped_broader()

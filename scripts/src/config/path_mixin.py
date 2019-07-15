@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 module_path = os.path.abspath(os.path.dirname(__file__))
-data_dir = os.path.join(module_path, "..", "..", "data")
+data_dir = os.path.join(module_path, "..", '..', "..", "data")
 gapminder_path = os.path.join(data_dir, "Gapminder_All_Time.csv")
 
 class PathMixin:

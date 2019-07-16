@@ -9,6 +9,11 @@ npm i
 npm run dev
 ```
 
+##### Test heroku setup locally
+```
+heroku local web
+```
+
 ### Scripts setup
 ##### Install dependencies
 ```

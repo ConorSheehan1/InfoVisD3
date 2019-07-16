@@ -8,7 +8,7 @@ window.onload = function() {
     // globals
     var dataset;
     var margin = {top: 20, right: 20, bottom: 20, left: 20};
-    var height = 700;
+    var height = 600;
     var width = 1400;
 
     var inner_height = height - margin.top - margin.bottom;
@@ -221,7 +221,7 @@ window.onload = function() {
         .enter()
         .append("text")
         .attr("x", 70)
-        .attr("y", 600)
+        .attr("y", height - 100)
         .text(year_value)
         .attr("font-family", "sans-serif")
         .attr("font-size", "50px")
@@ -238,7 +238,7 @@ window.onload = function() {
     }
 
     // load csv (I'm leaving the console log here just in case the data doesn't load)
-    d3.csv("/Gapminder_All_Time.csv", function (error, data) {
+    d3.csv("Gapminder_All_Time.csv", function (error, data) {
         if (error) {
             console.log("error loading csv");
         } else {

@@ -5,8 +5,13 @@ const router = express.Router();
 const port = process.env.port || 3000
 
 router.get('/', (req, res) => {
-  // res.send('Hello World!')
-  res.sendFile(path.join(__dirname, 'views', 'channelling_hans.html'))
+  res.sendFile(path.join(__dirname, 'views', 'gapminder.html'))
+})
+router.get('/worldmap', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'worldmap.html'))
+})
+router.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'about.html'))
 })
 
 app.use(express.static(path.join(__dirname, 'views')))

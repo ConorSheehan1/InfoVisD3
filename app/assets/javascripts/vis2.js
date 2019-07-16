@@ -181,20 +181,16 @@ window.onload = function(){
 
       // switch between two datasets
       update_data = function(){
-          console.log(updateCounter);
-
           if(updateCounter%2==0){
-              datasrc = "/data/Gapminder_All_Time.csv";
+              datasrc = "Gapminder_All_Time.csv";
           }else{
-              datasrc = "/data/governments_grouped.csv";
+              datasrc = "governments_grouped.csv";
           }
 
           d3.csv(datasrc, function (error, data){
-              console.log(datasrc);
               if (error) {
                   console.log("error loading csv")
               } else {
-                  console.log("data loaded", data);
                   dataset=sort_data(data);
                   gov_types = d3.map(dataset[0].values, function(d){return d.Government}).keys();
                   updateCounter++;
@@ -207,7 +203,7 @@ window.onload = function(){
       }
 
       // load csv first time page loads
-      d3.csv("/data/governments_grouped.csv", function (error, data){
+      d3.csv("governments_grouped.csv", function (error, data){
           if (error) {
               console.log("error loading csv")
           } else {

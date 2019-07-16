@@ -1,17 +1,26 @@
-### Local setup
-vis1 and vis2 require resources in the root directory (css and js).
-In order to run this locally you'll need to start a webserver in the root of this repo. e.g.
+### Web setup
+##### Install dependencies
 ```
-python3 -m http.server
+npm i
 ```
 
-### Tests
+##### Start dev server
+```
+npm run dev
+```
+
+### Scripts setup
+##### Install dependencies
+```
+pipenv install
+```
+
+### Run tests
 ```
 pipenv run python -m unittest scripts/test/*.py
 ```
 
-## Vis 1 channelling\_hans.html
-### Available at: [https://conorsgapminder.herokuapp.com/](https://conorsgapminder.herokuapp.com/)
+## Vis 1 gapminder.html
 
 ##### Features
 * Hover over a circle to show the name of the country it represents.
@@ -22,8 +31,7 @@ pipenv run python -m unittest scripts/test/*.py
 * Click chart legend to show/hide regions.
 	* Countries from a hidden region will not be selectable.
 
-## Vis 2 gdp\_by\_gov.html
-### Available at: [https://conorsworldmap.herokuapp.com/](https://conorsworldmap.herokuapp.com/)
+## Vis 2 worldmap.html
 
 ##### Features
 * Hover over bars in barchart to only show countries with selected government

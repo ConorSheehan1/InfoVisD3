@@ -238,7 +238,7 @@ window.onload = function() {
     }
 
     // load csv (I'm leaving the console log here just in case the data doesn't load)
-    d3.csv("/data/Gapminder_All_Time.csv", function (error, data) {
+    d3.csv("/Gapminder_All_Time.csv", function (error, data) {
         if (error) {
             console.log("error loading csv");
         } else {

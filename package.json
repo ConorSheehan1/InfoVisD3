@@ -1,0 +1,27 @@
+{
+  "name": "infovisd3",
+  "version": "1.0.0",
+  "description": "vis1 and vis2 require resources in the root directory (css and js). In order to run this locally you'll need to start a webserver in the root of this repo. e.g. ``` python3 -m http.server ```",
+  "main": "app/index.js",
+  "scripts": {
+    "dev": "nodemon app/index.js",
+    "start": "node app/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConorSheehan1/InfoVisD3.git"
+  },
+  "author": "Conor Sheehan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ConorSheehan1/InfoVisD3/issues"
+  },
+  "homepage": "https://github.com/ConorSheehan1/InfoVisD3#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}

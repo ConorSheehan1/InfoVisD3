@@ -7,29 +7,48 @@ data_dir = os.path.join(module_path, "..", "..", "data")
 
 
 class CountriesTest(unittest.TestCase):
-
     def setUp(self):
         self.df_all_time = pd.read_csv(os.path.join(data_dir, "Gapminder_All_Time.csv"))
         self.df_grouped = pd.read_csv(os.path.join(data_dir, "governments_grouped.csv"))
-        self.df_grouped_broader = pd.read_csv(os.path.join(data_dir, "governments_grouped_broader.csv"))
+        self.df_grouped_broader = pd.read_csv(
+            os.path.join(data_dir, "governments_grouped_broader.csv")
+        )
 
     def test_data_integrity_all_time(self):
-        assert self.df_all_time.loc[self.df_all_time['Country'] == "Puerto Rico"]["Government"].unique()
-        assert sorted(self.df_all_time.loc[self.df_all_time['Country'] == "Puerto Rico"]["Year"])
-        assert sorted(self.df_all_time.loc[self.df_all_time['Country'] == "Greenland"]["Year"])
+        assert self.df_all_time.loc[self.df_all_time["Country"] == "Puerto Rico"][
+            "Government"
+        ].unique()
+        assert sorted(
+            self.df_all_time.loc[self.df_all_time["Country"] == "Puerto Rico"]["Year"]
+        )
+        assert sorted(
+            self.df_all_time.loc[self.df_all_time["Country"] == "Greenland"]["Year"]
+        )
 
     def test_data_integrity_grouped(self):
-        expected_govs = ['republic', 'monarchy', 'autonomous region of Denmark', 'federation']
-        self.assertEqual(self.df_grouped['Government'].unique().tolist(), expected_govs)
+        expected_govs = [
+            "republic",
+            "monarchy",
+            "autonomous region of Denmark",
+            "federation",
+        ]
+        self.assertEqual(self.df_grouped["Government"].unique().tolist(), expected_govs)
 
     def test_data_integrity_grouped_broader(self):
         expected_govs = [
-            'republic', 'monarchy', 'federal republic', "people's republic",
-            'autonomous region of Denmark', 'federation'
+            "republic",
+            "monarchy",
+            "federal republic",
+            "people's republic",
+            "autonomous region of Denmark",
+            "federation",
         ]
-        self.assertEqual(self.df_grouped_broader['Government'].unique().tolist(), expected_govs)
+        self.assertEqual(
+            self.df_grouped_broader["Government"].unique().tolist(), expected_govs
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
 
 

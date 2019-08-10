@@ -4,11 +4,19 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+black = "*"
+pytest = "*"
 
 [packages]
 numpy = "==1.16.3"
 pandas = "==0.24.2"
-nose = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+tests = "pipenv run pytest"
+lint = "pipenv run black ./scripts"
+
+[pipenv]
+allow_prereleases = true

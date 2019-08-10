@@ -22,8 +22,15 @@ pipenv install
 
 ### Run tests
 ```
-pipenv run python -m unittest scripts/test/*.py
+pipenv run tests
 ```
+
+### Run linter
+```
+# note black is still in pre-release stage, needed pipenv install --dev --pre black
+pipenv run lint
+```
+
 
 ## Vis 1 gapminder.html
 

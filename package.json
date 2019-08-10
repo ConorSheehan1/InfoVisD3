@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon app/index.js",
     "start": "node app/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint app"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,9 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
     "nodemon": "^1.19.1"
   },
   "engines": {

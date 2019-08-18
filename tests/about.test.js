@@ -6,7 +6,7 @@ describe('about page', () => {
   describe('navbar', () => {
     ['Gapminder', 'World map', 'About'].forEach((text) => {
       it(`should link to the gapminder ${text}`, async () => {
-        await expect(page).toMatchElement('nav a', {text});
+        return await expect(page).toMatchElement('nav a', {text});
         // let el = page.$x(`//nav/a[text()="${text}"]`);
         // expect(el.href).to.eq(link);
       });
@@ -16,7 +16,7 @@ describe('about page', () => {
   describe('text content', () => {
     it('should have text in the center of the page', async () => {
       let paragraphs = await page.$$('body div.center p');
-      expect(paragraphs.length).toEqual(4);
+      return expect(paragraphs.length).toEqual(4);
     });
   });
 });

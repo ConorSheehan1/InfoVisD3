@@ -2,15 +2,20 @@ const puppeteer = require('puppeteer');
 
 describe('gapminder page', () => {
   beforeAll(async () => {
-    let browser = await puppeteer.launch();
-    let page = await browser.newPage();
-    await page.goto('http://127.0.0.1:4444/');
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
   });
-  // afterAll(async () => {
-  //   await browser.close();
-  // });
-  it('should disaply some text', async () => {
-    await expect(page).toMatch('gapminder');
+
+  beforeEach(async () => {
+    await page.goto('http://localhost:4444/');
+  });
+
+  describe('navbar', () => {
+    ['Gapminder', 'World map', 'About'].forEach((text) => {
+      it(`should link to the gapminder ${text}`, async () => {
+        await expect(page).toMatchElement('nav a', {text});
+      });
+    });
   });
 });
 

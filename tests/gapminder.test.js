@@ -1,13 +1,6 @@
-const puppeteer = require('puppeteer');
-
 describe('gapminder page', () => {
   beforeAll(async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-  });
-
-  beforeEach(async () => {
-    await page.goto('http://localhost:4444/');
+    await page.goto('http://localhost:4444/', { waitUntil: 'networkidle0' });
   });
 
   describe('navbar', () => {

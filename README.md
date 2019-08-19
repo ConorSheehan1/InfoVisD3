@@ -1,0 +1,70 @@
+[![Build Status](https://travis-ci.org/ConorSheehan1/InfoVisD3.svg?branch=master)](https://travis-ci.org/ConorSheehan1/InfoVisD3)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+# InfoVisD3
+Information visualization project using d3.js
+
+### Web setup (js)
+**Install dependencies**
+```
+npm i
+```
+
+**Start dev server**
+```
+npm run dev
+```
+
+**Tests**
+```
+npm run e2eHeadlessTest
+```
+
+**Linter**
+```
+npm run lint
+```
+
+**Test heroku setup locally**
+```
+heroku local web
+```
+
+### Scripts setup (python)
+The scripts are used to manipulate the csv data for presentation.
+
+**Install dependencies**
+```
+pipenv install
+```
+
+**Run tests**
+```
+pipenv run tests
+```
+
+**Run linter**
+```
+# note black is still in pre-release stage, needed pipenv install --dev --pre black
+pipenv run lint
+```
+
+
+## Vis 1 /
+
+**Features**
+* Hover over a circle to show the name of the country it represents.
+* Move the slider to manually change year.
+* Play/pause button to animate between years
+
+**Extra Feature**
+* Click chart legend to show/hide regions.
+	* Countries from a hidden region will not be selectable.
+
+## Vis 2 /worldmap
+
+**Features**
+* Hover over bars in barchart to only show countries with selected government
+* Slide slider to change year value.
+* Play/pause button
+* Switch between full dataset and reduce dataset

@@ -1,0 +1,42 @@
+{
+  "name": "infovisd3",
+  "version": "1.0.0",
+  "description": "vis1 and vis2 require resources in the root directory (css and js). In order to run this locally you'll need to start a webserver in the root of this repo. e.g. ``` python3 -m http.server ```",
+  "main": "app/index.js",
+  "jest": {
+    "preset": "jest-puppeteer"
+  },
+  "scripts": {
+    "dev": "nodemon app/index.js",
+    "start": "node app/index.js",
+    "e2eHeadlessTest": "jest",
+    "ci": "jest --runInBand",
+    "lint": "eslint app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConorSheehan1/InfoVisD3.git"
+  },
+  "author": "Conor Sheehan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ConorSheehan1/InfoVisD3/issues"
+  },
+  "homepage": "https://github.com/ConorSheehan1/InfoVisD3#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "jest": "^24.8.0",
+    "jest-puppeteer": "^4.3.0",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.1",
+    "puppeteer": "^1.19.0"
+  },
+  "engines": {
+    "node": "12.x"
+  }
+}

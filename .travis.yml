@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "12"
+cache: npm
+dist: xenial
+sudo: false
+addons:
+  chrome: stable
+before_install:
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+cache:
+  yarn: true
+  directories:
+    - node_modules
+install:
+  - npm install
+script:
+  - npm run ci

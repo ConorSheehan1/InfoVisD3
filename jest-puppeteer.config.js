@@ -10,6 +10,7 @@ module.exports = {
       '--disable-setuid-sandbox',
       '--proxy-server="direct://"',
       '--proxy-bypass-list=*',
+      '--debugging-port=9222',
       '--mute-audio',
     ],
     devtools: process.env.DEVTOOLS !== 'true',

@@ -203,8 +203,6 @@ window.onload = function () {
     if (error) {
       console.log('error loading csv');
     } else {
-      console.log('data loaded', data);
-
       // group data by year
       dataset = sort_data(data);
 

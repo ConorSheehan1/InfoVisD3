@@ -4,7 +4,9 @@
 # InfoVisD3
 Information visualization project using d3.js
 
-### Web setup (js)
+This project uses [nodenv](https://github.com/nodenv/nodenv) and [pyenv](https://github.com/pyenv/pyenv) to manage language versions, and [npm](https://github.com/npm/cli) and [pipenv](https://github.com/pypa/pipenv) to manage dependencies.
+
+### Web setup (JavaScript)
 ```
 # Install dependencies
 npm i

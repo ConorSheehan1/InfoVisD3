@@ -5,50 +5,37 @@
 Information visualization project using d3.js
 
 ### Web setup (js)
-**Install dependencies**
 ```
+# Install dependencies
 npm i
-```
 
-**Start dev server**
-```
-npm run dev
-```
-
-**Tests**
-```
+# Tests
 npm run e2eHeadlessTest
-```
 
-**Linter**
-```
+# Linter
 npm run lint
-```
 
-**Test heroku setup locally**
-```
+# Start dev server
+npm run dev
+
+# Test heroku setup locally
 heroku local web
 ```
 
 ### Scripts setup (python)
 The scripts are used to manipulate the csv data for presentation.
 
-**Install dependencies**
+****
 ```
+# Install dependencies
 pipenv install
-```
 
-**Run tests**
-```
+# Tests
 pipenv run tests
-```
 
-**Run linter**
-```
-# note black is still in pre-release stage, needed pipenv install --dev --pre black
+# Linter: note black is still in pre-release stage, needed pipenv install --dev --pre black
 pipenv run lint
 ```
-
 
 ## Vis 1 /
 

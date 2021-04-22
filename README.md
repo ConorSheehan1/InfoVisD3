@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/ConorSheehan1/InfoVisD3.svg?branch=master)](https://travis-ci.org/ConorSheehan1/InfoVisD3)
+[![Build Status](https://github.com/ConorSheehan1/InfoVisD3/workflows/ci/badge.svg)](https://github.com/ConorSheehan1/InfoVisD3/actions/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # InfoVisD3
